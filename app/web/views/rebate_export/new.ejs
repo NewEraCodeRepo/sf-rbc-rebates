@@ -1,0 +1,50 @@
+<header>
+    <h1><%= title %></h1>
+    <% if (rebatesToExport.length) { %>
+    <nav>
+        <form method="post" action="/rebate_export/export" data-behavior="log">
+            <input type="submit" value="Sync to MC">
+        </form>
+        <a href="/rebate_export/download" class="button">Download file</a>
+    </nav>
+    <% } %>
+</header>
+
+<% if (rebatesToExport.length) { %>
+<pre id="log"></pre>
+
+<table>
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Account</th>
+        <th>Client</th>
+        <th>Offer</th>
+        <th>Transaction</th>
+        <th>Amount</th>
+        <th>Reward Type</th>
+        <th>Status</th>
+        <th>Issued</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% rebatesToExport.forEach(rebateToExport => { %>
+    <tr>
+        <td><%= rebateToExport.id %></td>
+        <td><%= rebateToExport.accountId %></td>
+        <td><%= rebateToExport.userId %></td>
+        <td><%= rebateToExport.rebateCriteriaId %></td>
+        <td><%= rebateToExport.accountTransactionId %></td>
+        <td><%= rebateToExport.amount %></td>
+        <td><%= rebateToExport.rewardType %></td>
+        <td><%= rebateToExport.status %></td>
+        <td><%= rebateToExport.issuedAt %></td>
+    </tr>
+    <% }) %>
+    </tbody>
+</table>
+</form>
+
+<% } else { %>
+<p class="empty">There are no rebates to export.</p>
+<% } %>

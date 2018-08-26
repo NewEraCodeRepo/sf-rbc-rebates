@@ -1,0 +1,71 @@
+<header>
+  <h1><%= title %></h1>
+
+  <nav>
+    <a href="/transactions/new" class="button">New transaction</a>
+    <!-- <a href="/transaction_import/upload" class="button">Upload transactions</a>
+    <form method="post" action="/transaction_import/sync" data-behavior="log">
+      <input type="submit" value="Sync from MC">
+    </form> -->
+    <form method="post" action="/transactions/process" data-behavior="log">
+      <input type="submit" value="Process transactions">
+    </form>
+  </nav>
+</header>
+
+<pre id="log"></pre>
+
+<form method="post">
+
+<% if (transactionsForRebateCriteria.length) { %>
+  <input type="submit" name="action" id="single-delete" value="Delete" formaction="/transactions/delete" class="delete-button" disabled/>
+  <input type="submit" name="action" value="Delete all" formaction="/transactions/delete-all" class="delete-button" />
+
+  <table>
+      <tr>
+        <th>#</th>
+        <th>Account</th>
+        <th>Client</th>
+        <th>CustID</th>
+        <th>Offer</th>
+        <th>Amount</th>
+        <th>Base Points</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Occurred</th>
+        <th>Processed</th>
+        <th>Card Type</th>
+        <th>Card Number</th>
+        <th>Product Code</th>
+        <th><input type="checkbox" id="toggle-all-checkboxes"/></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% transactionsForRebateCriteria.forEach(transactionForRebateCriteria => { %>
+        <tr>
+          <td><%= transactionForRebateCriteria.transactionId %></td>
+          <td><%= transactionForRebateCriteria.accountId %></td>
+          <td><%= transactionForRebateCriteria.userId %></td>
+          <td><%= transactionForRebateCriteria.tsysCustomerId %></td>
+          <td><%= transactionForRebateCriteria.rebateCriteriaId %></td>
+          <td><%= transactionForRebateCriteria.amount %></td>
+          <td><%= transactionForRebateCriteria.basePoints %></td>
+          <td><%= transactionForRebateCriteria.transactionType %></td>
+          <td><%= transactionForRebateCriteria.status || 'pending' %></td>
+          <td><%= transactionForRebateCriteria.transactionDate %></td>
+          <td><%= transactionForRebateCriteria.processedAt || 'pending' %></td>
+          <td><%= transactionForRebateCriteria.cardType %></td>
+          <td><%= transactionForRebateCriteria.card %></td>
+          <td><%= transactionForRebateCriteria.productCodeExternal %></td>
+          <td><input type="checkbox" value="<%= transactionForRebateCriteria.id %>" name="ids[]"></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+</form>
+
+  <p class="note">Note: showing only up to a maximum of 500 transactions.</p>
+<% } else { %>
+  <p class="empty">There are no transactions yet.</p>
+<% } %>

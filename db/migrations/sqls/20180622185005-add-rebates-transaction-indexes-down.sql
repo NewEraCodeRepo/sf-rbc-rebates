@@ -1,0 +1,3 @@
+DROP INDEX rebates_transaction_id_idx ON rebates;
+DROP INDEX transaction_user_offer_status_idx on transaction_for_rebate_criteria;
+DROP INDEX rebates_offer_user_idx ON rebates;

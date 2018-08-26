@@ -1,0 +1,5 @@
+#!/bin/sh
+
+function evaluate_typescript {
+  yarn run --silent ts-node $1
+}

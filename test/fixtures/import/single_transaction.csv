@@ -1,0 +1,2 @@
+client_id,offer_id,transaction_id,type,card,amount,base_points,rebate_id,card_type,transaction_date,transaction_currency,account_id,transaction_postal_code,product_code_external,is_manual
+EEB570C0B4B5F597B4262B36013A598B7CC9B0E5,36168,8FBEF8F9-D636-41BF-8838-9C88FB419A46,1,451401******7976,1670,1670,,1,2017-08-17 00:00:00,CAD,117569,T3K,IAV,True

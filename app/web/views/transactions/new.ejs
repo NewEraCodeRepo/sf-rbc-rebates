@@ -1,0 +1,131 @@
+<h1><%= title %></h1>
+
+<form action="/transactions" method="post">
+
+  <div id="accountId" class="group">
+    <label for="accountId">Account ID</label>
+    <input name="accountId" required>
+  </div>
+
+  <div class="group">
+    <label for="userId">Client</label>
+    <select name="userId" class="select2-user" style="width: 20%">
+      <option value="testClientNoRecord" selected="selected">US342 - Fake Client Not in DB</option>
+    </select>
+  </div>
+
+  <div class="group">
+    <label for="rebateCriteriaId">Offer</label>
+    <select name="rebateCriteriaId" class="select2-offer" style="width: 20%">
+      <option value="testOfferNoRecord" selected="selected">US538 - Fake Offer Not in DB</option>
+    </select>
+  </div>
+
+  <div class="group">
+    <label for="amount">Amount $</label>
+    <input type="number" id="amount" name="amount" step="0.01" placeholder="e.g. 11.37" min="0" required>
+  </div>
+
+  <div class="group">
+    <label for="basePoints">Base points</label>
+    <input type="number" id="basePoints" name="basePoints" step="0.01" placeholder="e.g. 11.37" min="0" value="0" required>
+  </div>
+
+  <div class="group">
+    <label for="transactionDate">Occurred</label>
+    <input type="datetime-local" id="transactionDate" name="transactionDate">
+    <div class="note"><p class="info">Leave blank for the current time.</p></div>
+  </div>
+
+  <div class="group">
+    <label for="transactionType">Transaction Type</label>
+    <select id="transactionType" name="transactionType">
+      <option value="qualifying">Qualifying</option>
+      <option value="fulfillment">Fulfillment</option>
+      <option value="refund">Refund</option>
+    </select>
+  </div>
+
+  <div id="rebateId" class="group">
+    <label for="rebateId">Rebate ID</label>
+    <input name="rebateId">
+  </div>
+
+  <div class="group">
+    <label for="cardType">Card Type</label>
+    <select id="cardType" name="cardType">
+      <option value="credit_card">Credit Card</option>
+      <option value="checking_account">Debit Card</option>
+    </select>
+  </div>
+
+  <div id="customerId" class="group">
+    <label for="customerId">Customer Id</label>
+    <input name="customerId">
+  </div>
+
+  <div id="card" class="group">
+    <label for="card">Card Number</label>
+    <input name="card">
+  </div>
+
+  <div id="productCodeExternal" class="group">
+      <label for="productCodeExternal">Product Code</label>
+      <input name="productCodeExternal">
+    </div>
+
+  <div class="actions">
+    <input type="submit" value="Create">
+  </div>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script>
+    // Show rebateId if type = fulfillment
+    $("#rebateId").hide();
+    $("#transactionType").change(function(){
+        if($(this).val() === "fulfillment"){
+            $('#rebateId').show();
+        } else {
+            $('#rebateId').hide();
+        }
+    });
+    $(".select2-user").select2({
+      ajax: {
+        url: "/search/client",
+        dataType: 'json',
+        data: function(params) {
+          return {
+            term: params.term || '',
+            page: params.page || 1
+          }
+        },
+        cache: true
+      },
+      placeholder: 'Search for a client',
+      dropdownAutoWidth: true,
+      minimumInputLength: 1,
+    });
+    $(".select2-offer").select2({
+      ajax: {
+        url: "/search/offer",
+        dataType: 'json',
+        data: function(params) {
+          return {
+            term: params.term || '',
+            page: params.page || 1
+          }
+        },
+        cache: true
+      },
+      placeholder: 'Search for an offer',
+      dropdownAutoWidth: true,
+      minimumInputLength: 1,
+    });
+</script>
+
+<script>
+    var validFrom = new Date();
+    document.querySelector("#transactionDate").value = validFrom.toISOString().substr(0, 10) + "T00:00";
+</script>

@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS report_myoffers_rebate_journal_record_v3__c;

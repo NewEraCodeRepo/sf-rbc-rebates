@@ -1,0 +1,46 @@
+#!/bin/sh
+
+# Exit if any command fails
+set -e
+
+source bin/support/database
+
+DATABASE_URL=$(database_url)
+
+printf "$DATABASE_URL... "
+
+function can_connect {
+  psql --dbname $DATABASE_URL -c "" &> /dev/null
+}
+
+function create_database {
+  DATABASE_USER=$(database_user)
+  DATABASE_HOST=$(database_hostname)
+  DATABASE_NAME=$(database_name)
+
+  createuser $DATABASE_USER -d -h $DATABASE_HOST
+  createdb $DATABASE_NAME -U $DATABASE_USER -h $DATABASE_HOST
+}
+
+for number in {0,1,2}
+  do
+
+  if can_connect; then
+    echo "OK"
+  else
+    create_database
+    can_connect
+    echo "created"
+  fi
+
+  if [ $number == '0' ]; then
+    source bin/support/salesforcedatabase
+  fi
+
+  if [ $number == '1' ]; then
+    source bin/support/historydatabase
+  fi
+
+  DATABASE_URL=$(database_url)
+  printf "$DATABASE_URL... "
+done

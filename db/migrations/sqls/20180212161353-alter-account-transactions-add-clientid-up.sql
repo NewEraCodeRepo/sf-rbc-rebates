@@ -1,0 +1,1 @@
+ALTER TABLE account_transactions ADD COLUMN user_id text;

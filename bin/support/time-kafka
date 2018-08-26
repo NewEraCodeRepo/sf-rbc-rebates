@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# Usage:
+# time-kafka
+# time-kafka --timeout-in-secs 10
+# time-kafka --timeout-in-secs 60 --retry
+
+TIMEOUT_IN_SECS=60
+
+while :; do
+  case $1 in
+    --timeout-in-secs)
+      TIMEOUT_IN_SECS=$2
+      shift
+      ;;
+    --retry)
+      RETRY=true
+      ;;
+    -*?)
+      echo "Unrecognized flag $1"
+      exit 1
+      ;;
+    *) # No more options, so break out of the loop.
+      break
+  esac
+
+  shift
+done
+
+function timeout {
+  command=$@
+  ( $command ) & pid=$!
+  ( sleep $TIMEOUT_IN_SECS && kill -HUP $pid && echo "Timeout ($TIMEOUT_IN_SECS secs) reached, exiting" ) 2>/dev/null & watcher=$!
+  wait $pid 2>/dev/null && pkill -HUP -P $watcher
+}
+
+function time-kafka {
+  timeout node build/test/tasks/time-kafka.js
+}
+
+if [ "$RETRY" == true ]; then
+  until time-kafka; do
+    echo "Retrying..."
+  done
+else
+  time-kafka
+fi

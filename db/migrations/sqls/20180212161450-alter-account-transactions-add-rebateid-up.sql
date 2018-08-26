@@ -1,0 +1,1 @@
+ALTER TABLE account_transactions ADD COLUMN rebate_id text;

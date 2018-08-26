@@ -1,0 +1,41 @@
+<h1><%= title %></h1>
+
+<form action="/clients" method="post">
+
+  <div class="group">
+    <label for="userId">ID</label>
+    <input id="userId" name="userId" required autofocus placeholder="e.g. TEST_CLIENT_X">
+  </div>
+
+  <div class="group">
+    <label for="linkedOfferIds">Linked Offers</label>
+    <select name="linkedOfferIds" multiple>
+      <% rebateCriterias.forEach(rebateCriteria => { %>
+        <option value="<%= rebateCriteria.id %>">
+          <%= rebateCriteria.descriptionForTesting || `Offer ${rebateCriteria.id}` %>
+        </option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div class="group">
+    <label for="targetedOfferIds">Targeted Offers</label>
+    <select name="targetedOfferIds" multiple>
+      <% rebateCriterias.forEach(rebateCriteria => { %>
+        <option value="<%= rebateCriteria.id %>">
+          <%= rebateCriteria.descriptionForTesting || `Offer ${rebateCriteria.id}` %>
+        </option>
+      <% }) %>
+    </select>
+  </div>
+
+  <!-- Blacklisted -->
+  <div class="group">
+    <label for="isBlacklisted">Is Blacklisted</label>
+    <input name="isBlacklisted" type="checkbox">
+  </div>
+  
+  <div class="actions">
+    <input type="submit" value="Create">
+  </div>
+</form>

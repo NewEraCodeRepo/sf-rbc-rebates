@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# Exit if any command fails
+set -e
+
+# Optional list of processes to start
+declare -a PROCESSES
+VERBOSE=true
+
+# Parse options
+while test $# -gt 0; do
+  case $1 in
+    --watch)
+      WATCH=true
+      VERBOSE=false
+      ;;
+    --quiet)
+      VERBOSE=false
+      ;;
+    *)
+      PROCESSES+=($1)
+      ;;
+  esac
+
+  shift
+done
+
+if [ "$WATCH" = true ]; then
+  bin/watch "bin/start ${PROCESSES[@]} --quiet"
+fi
+
+if [ "$VERBOSE" = true ]; then
+  printf "==> Building... "
+fi
+
+bin/build
+
+if [ "$VERBOSE" = true ]; then
+  echo "OK"
+  echo "==> Starting... "
+fi
+
+exec heroku local ${PROCESSES[@]}

@@ -1,0 +1,57 @@
+#!/bin/sh
+
+# Exit if any command fails
+set -e
+
+function fail {
+  echo
+  echo "==> $1"
+  exit 1
+}
+
+echo "==> Checking environment"
+command -v node || fail 'Node not found. Install from https://nodejs.org'
+command -v yarn || fail 'Yarn not found. Install from https://yarnpkg.com)'
+command -v heroku || fail 'Heroku not found. Install from https://devcenter.heroku.com/articles/heroku-cli#download-and-install)'
+command -v psql || fail 'PostgreSQL not found. Install from https://www.postgresql.org/download/'
+command -v kafka-topics || fail 'kafka-topics not found. Please install Kafka'
+
+echo
+echo "==> Installing dependencies"
+yarn install
+
+echo
+echo "==> Checking Node version..."
+bin/support/confirm-node-version
+
+echo
+echo "==> Bootstrapping environments"
+ENVIRONMENTS=( development test )
+
+for environment in ${ENVIRONMENTS[@]}; do
+  echo $environment
+  export NODE_ENV=${environment}
+
+  printf "  Database: "
+  bin/support/bootstrap-database
+
+  printf "  Migrations: "
+  bin/dbmigrate up > /dev/null
+  echo "up-to-date"
+
+  printf "  Kakfa: "
+  bin/support/bootstrap-kafka
+  echo
+
+  echo
+  echo
+done
+
+cat <<FOOTER
+==> You're good to go!
+
+    To start developing, run:
+
+      bin/start
+
+FOOTER

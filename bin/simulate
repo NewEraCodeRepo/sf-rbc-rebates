@@ -1,0 +1,34 @@
+#!/bin/sh
+
+source bin/support/typescript
+
+while :; do
+  case $1 in
+    --seed)
+      SEED=$2
+      shift
+      ;;
+    --simulator)
+      SIMULATOR=$2
+      shift
+      ;;
+    -*?)
+      echo "Unrecognized flag $1"
+      exit 1
+      ;;
+    *) # No more options, so break out of the loop.
+      break
+  esac
+
+  shift
+done
+
+evaluate_typescript <<TYPESCRIPT
+  import simulators from "./test/simulators";
+
+  const simulator = simulators.find("$SIMULATOR") || simulators.sample();
+
+  console.log("[SIMULATOR]", simulator.name);
+  console.log("[SEED]", simulators.seed($SEED));
+  console.log(simulator.generate());
+TYPESCRIPT

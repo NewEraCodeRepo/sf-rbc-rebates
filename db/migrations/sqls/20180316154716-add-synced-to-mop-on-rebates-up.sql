@@ -1,0 +1,1 @@
+ALTER TABLE rebates ADD COLUMN last_mop_sync TIMESTAMP WITH TIME ZONE;

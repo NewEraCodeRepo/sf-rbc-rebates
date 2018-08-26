@@ -1,0 +1,1 @@
+ALTER TABLE transaction_import_details ALTER COLUMN number_of_items_imported TYPE integer;

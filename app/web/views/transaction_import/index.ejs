@@ -1,0 +1,47 @@
+<header>
+  <h1><%= title %></h1>
+
+  <nav>
+    <form method="post" action="/transaction_import/sync" data-behavior="log">
+      <input type="submit" value="Sync from MC">
+    </form>
+  </nav>
+</header>
+
+<pre id="log"></pre>
+
+<form method="post">
+
+<% if (transactionImportDetails.length) { %>
+  <input type="submit" name="action" id="single-delete" value="Delete" formaction="/transaction_import/delete" class="delete-button" disabled/>
+  <input type="submit" name="action" value="Delete all" formaction="/transaction_import/delete-all" class="delete-button" />
+
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Started At</th>
+        <th>Finished At</th>
+        <th>Status</th>
+        <th>Number Of Transactions</th>
+        <th><input type="checkbox" id="toggle-all-checkboxes"/></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% transactionImportDetails.forEach(transactionImportDetail => { %>
+        <tr>
+          <td><%= transactionImportDetail.id %></td>
+          <td><%= transactionImportDetail.startedAt %></td>
+          <td><%= transactionImportDetail.finishedAt %></td>
+          <td><%= transactionImportDetail.status || 'pending' %></td>
+          <td><%= transactionImportDetail.numberOfItems %></td>
+          <td><input type="checkbox" value="<%= transactionImportDetail.id %>" name="ids[]"></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</form>
+
+<% } else { %>
+  <p class="empty">Data has not been synced from MC yet.</p>
+<% } %>

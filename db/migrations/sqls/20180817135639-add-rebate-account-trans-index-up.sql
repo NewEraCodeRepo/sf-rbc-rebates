@@ -1,0 +1,1 @@
+CREATE INDEX rebates_index_acct_trans_id on rebates(account_transaction_id);

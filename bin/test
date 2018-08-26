@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Exit if any command fails
+set -e
+
+# Args to pass to Mocha
+declare -a TEST_ARGS
+
+DATABASE_COMMAND=dbmigrate
+
+while test $# -gt 0; do
+  case $1 in
+    --watch)
+      WATCH=true
+      ;;
+    --db-reset)
+      DATABASE_COMMAND="dbreset --confirm"
+      ;;
+    --skip-migrations)
+      DATABASE_COMMAND=false
+      ;;
+    --verbose)
+      VERBOSE=true
+      ;;
+    --timeout)
+      TIMEOUT=15000
+      ;;
+    --only)
+      TEST_ARGS+=(--grep $2)
+      shift
+      ;;
+    --except)
+      TEST_ARGS+=(--grep $2 --invert)
+      shift
+      ;;
+    --seed)
+      export SEED=$2
+      shift
+      ;;
+    *)
+      TEST_ARGS+=($1)
+      ;;
+  esac
+
+  shift
+done
+
+if [ "$WATCH" == true ]; then
+  bin/watch "bin/build && bin/test ${TEST_ARGS[@]} && bin/lint"
+fi
+
+export NODE_ENV=test
+
+if [ "$DATABASE_COMMAND" != false ]; then
+  if [ "$VERBOSE" == true ]; then
+    bin/$DATABASE_COMMAND
+  else
+    bin/$DATABASE_COMMAND > /dev/null
+  fi
+fi
+
+TEST_PATTERN="build/test/**/*.spec.js"
+TEST_RUNNER_COMMAND="mocha --require ts-node/register --require build/test/setup.js ${TEST_ARGS[@]}"
+
+exec yarn run --silent $TEST_RUNNER_COMMAND "$TEST_PATTERN"

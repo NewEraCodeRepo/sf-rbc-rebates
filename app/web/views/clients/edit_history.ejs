@@ -1,0 +1,22 @@
+<form action="/clients/edit_history" method="post">
+
+  <div class="group">
+    <label for="newTimestamp">Updated Timestamp</label>
+    <input type="datetime-local" id="newTimestamp" name="newTimestamp">
+    <div class="note"><p class="info">Leave blank for the current updated timestamp.</p></div>
+  </div>
+
+  <div class="actions">
+    <input id="userId" name="userId" type="hidden" value="<%= user.userId %>">
+    <input id="isoDate" name="isoDate" type="hidden" value="<%= user.isoDate %>">
+    <input id="updateTimestamp" name="updateTimestamp" type="hidden" value="<%= user.updateTimestamp %>">
+    <input id="targetedOffers" name="targetedOffers" type="hidden" value="<%= user.targetedOffers %>">
+    <input id="linkedOffers" name="linkedOffers" type="hidden" value="<%= user.linkedOffers %>">
+    <input id="isEnrolledToMyOffers" name="isEnrolledToMyOffers" type="hidden" value="<%= user.isEnrolledToMyOffers %>">
+    <input type="submit" value="Update">
+  </div>
+</form>
+
+<script>
+  document.querySelector("#newTimestamp").value = '<%= user.isoDate %>'.substr(0, 16);
+</script>

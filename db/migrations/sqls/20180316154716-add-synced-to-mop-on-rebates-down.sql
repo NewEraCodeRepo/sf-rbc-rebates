@@ -1,0 +1,1 @@
+ALTER TABLE rebates DROP COLUMN last_mop_sync;

@@ -1,0 +1,31 @@
+<h1><%= title %> <%= userViewData.userId %></h1>
+
+<form action="/clients/edit" method="post">
+
+  <div class="group">
+    <label for="linkedOfferIds">Linked Offers</label>
+    <select name="linkedOfferIds" multiple>
+      <% userViewData.allOfferIds.forEach(offerId => { %>
+        <option value="<%= offerId %>">
+          <%= `Offer ${offerId}` %>
+        </option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div class="group">
+    <label for="targetedOfferIds">Targeted Offers</label>
+    <select name="targetedOfferIds" multiple>
+      <% userViewData.allOfferIds.forEach(offerId => { %>
+        <option value="<%= offerId %>">
+          <%= `Offer ${offerId}` %>
+        </option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div class="actions">
+    <input id="userId" name="userId" type="hidden" value="<%= userViewData.userId %>">
+    <input type="submit" value="Update">
+  </div>
+</form>

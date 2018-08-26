@@ -1,0 +1,92 @@
+{
+  // Indicates to IDEs to compile all TypeScript files when saving.
+  "compileOnSave": true,
+
+  "compilerOptions": {
+      /* Basic Options */
+      "allowSyntheticDefaultImports": true,
+
+      // Compile sources to ES2016.
+      "target": "es2016",
+
+      // Compile modules into CommonJS-style modules.
+      "module": "commonjs",
+
+      // Libraries to include during compilation.
+      "lib": [
+          "es2017",
+          "es2015",
+          "dom"
+      ],
+
+      // Place compiled files in a `build` directory.
+      "outDir": "build",
+
+      // Root directory of the input files.
+      "rootDir": ".",
+
+      // Colorize output.
+      "pretty": true,
+
+      /* Strict Type-Checking Options */
+
+      // Adds "use strict" to each compiled JS file for strict mode.
+      "alwaysStrict": true,
+
+      // Raise a compilation error when `any` is implied but not explicit.
+      "noImplicitAny": false,
+
+      // Raise a compilation error when not all code paths in a function
+      // return a value.
+      "noImplicitReturns": false,
+
+      // Raise a compilation error when `this` is inferred to be `any`.
+      "noImplicitThis": true,
+
+      // Raise a compilation error when a case in a switch statement doesn't
+      // break (and would fall-through to the next case).
+      "noFallthroughCasesInSwitch": true,
+
+      // Disallow types to be set to `null` or `undefined` unless declared
+      // as `any`.
+      "strictNullChecks": true,
+
+      /* Module Resolution */
+
+      // Base directory to use for module resolution.
+      "baseUrl": ".",
+
+      // Mapping of entries for module names to baseUrl-relative paths.
+      "paths": {
+          "*" : ["node_modules/@types/*", "*"],
+          "datapipeline-lib/*": ["node_modules/datapipeline-lib/types/*"]
+      },
+
+      // List of directories to include type definitions from.
+      "typeRoots": ["node_modules/@types"],
+
+      /* Source Maps */
+
+      // Emit the source and source maps in a single file.
+      "inlineSources": true,
+
+      // Emit a single file with source maps instead of a separate file.
+      "inlineSourceMap": true,
+
+      /* Experimental options */
+
+      // Support experiemental ES7 @expression decorators.
+      "experimentalDecorators": true,
+
+      // Support for reflection on decorator metadata (via reflect-metadata).
+      "emitDecoratorMetadata": true
+  },
+
+  // Compile all the following patterns.
+  "include": [
+      "app/**/*", // All .ts, .tsx, and .d.ts files under app
+      "config/**/*", // All .ts, .tsx, and .d.ts files under config
+      "lib/**/*", // All .ts, .tsx, and .d.ts files under lib
+      "test/**/*" // All .ts, .tsx, and .d.ts files under test
+  ]
+}

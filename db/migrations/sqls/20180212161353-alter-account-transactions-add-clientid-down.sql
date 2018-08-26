@@ -1,0 +1,1 @@
+ALTER TABLE account_transactions DROP column user_id;

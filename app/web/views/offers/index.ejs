@@ -1,0 +1,68 @@
+<header>
+  <h1><%= title %></h1>
+
+  <nav>
+    <form method="post" action="/offers/delete-all">
+      <input type="submit" value="Delete all" class="delete-button">
+    </form>
+
+    <a href="/offers/new" class="button">New offer</a>
+  </nav>
+</header>
+
+<% if (rebateCriterias.length) { %>
+<table>
+  <thead>
+  <tr>
+    <th>#</th>
+    <th>Description</th>
+    <th>Reward</th>
+    <th>Merchant Id</th>
+    <th>Valid From</th>
+    <th>Valid To</th>
+    <th>Redemption Period</th>
+    <th>Refund Period</th>
+    <th>Redeemable</th>
+    <th>Linked?</th>
+    <th>Targeted?</th>
+    <th>Activated</th>
+    <th>Limit</th>
+    <th>Limit Type</th>
+    <th>Redemption Type</th>
+    <th># Redemptions</th>
+    <th>Total Redemptions</th>
+    <th>Products</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% rebateCriterias.forEach(rebateCriteria => { %>
+  <tr>
+    <td><%= rebateCriteria.id %></td>
+    <td><%= rebateCriteria.descriptionForTesting %></td>
+    <td>
+        <%= rebateCriteria.rewardCalculation.operation %>
+        <%= rebateCriteria.rewardCalculation.operand %>
+        <%= rebateCriteria.rewardCalculation.unit %>
+    </td>
+    <td><%= rebateCriteria.merchantId %></td>
+    <td><%= rebateCriteria.validFromDate %></td>
+    <td><%= rebateCriteria.validToDate %></td>
+    <td><%= rebateCriteria.redemptionPeriodInDays %></td>
+    <td><%= rebateCriteria.refundPeriodInDays %></td>
+    <td><%= rebateCriteria.isRedeemable %></td>
+    <td><%= rebateCriteria.requiresCustomerToBeLinked %></td>
+    <td><%= rebateCriteria.requiresCustomerToBeTargeted %></td>
+    <td><%= rebateCriteria.hasBeenActivated %></td>
+    <td><%= rebateCriteria.redemptionLimit %></td>
+    <td><%= rebateCriteria.redemptionLimitType %></td>
+    <td><%= rebateCriteria.redemptionBasedOn %></td>
+    <td><%= rebateCriteria.count %></td>
+    <td><%= rebateCriteria.amount %></td>
+    <td> <a href="/offers/products/<%= rebateCriteria.id %>">Products</a> </td>
+  </tr>
+  <% }) %>
+  </tbody>
+</table>
+<% } else { %>
+<p class="empty">There are no offers yet.</p>
+<% } %>

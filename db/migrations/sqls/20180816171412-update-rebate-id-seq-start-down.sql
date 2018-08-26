@@ -1,0 +1,1 @@
+ALTER SEQUENCE public.rebates_id_seq MINVALUE 50000 RESTART 50000;

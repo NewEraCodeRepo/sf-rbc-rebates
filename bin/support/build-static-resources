@@ -1,0 +1,13 @@
+#!/bin/bash
+
+BUILD_PATH=${BUILD_PATH:-build}
+
+function sync_resources {
+  source=$1/
+  destination=$BUILD_PATH/$source/
+
+  rsync --archive --exclude "*.ts" --exclude ".*" $source $destination
+}
+
+sync_resources app/web
+sync_resources test

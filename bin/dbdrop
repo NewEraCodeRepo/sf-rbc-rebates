@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# Exit if any command fails
+set -e
+
+while :; do
+  case $1 in
+    --test)
+      export NODE_ENV=test
+      ;;
+    --confirm)
+      CONFIRM=true
+      ;;
+    -*?)
+      echo "Unrecognized flag $1"
+      exit 1
+      ;;
+    *) # No more options, so break out of the loop.
+      break
+  esac
+
+  shift
+done
+
+source bin/support/database
+
+DATABASE_NAME=$(database_name)
+DATABASE_USER=$(database_user)
+
+echo "==> Destroying database $DATABASE_NAME and user $DATABASE_USER"
+
+if [ "$CONFIRM" != true ]; then
+  printf "Are you sure you want to continue? [y/N] "
+  read answer
+
+
+  if [ "$answer" != "y" ]; then
+    echo "Leaving database intact."
+    exit 1
+  fi
+fi
+
+upperlim='1'
+
+# for all environments except test, we use separate dbs
+# in test, it's one db with separate schemas
+if [ "$NODE_ENV" == "test" ]; then
+  upperlim='0'
+fi
+
+# purposely NOT including the drop of the SF/Heroku Connect db
+# since many other apps depend on this...
+for ((i=0; i<=upperlim; i++)); do
+
+printf "Closing connections... "
+
+CLOSE_ALL_CONNECTIONS=$(cat <<SQL
+  SELECT pg_terminate_backend(pg_stat_activity.pid)
+  FROM pg_stat_activity
+  WHERE pg_stat_activity.datname = '$DATABASE_NAME'
+  AND pid <> pg_backend_pid();
+SQL
+)
+
+  psql -U $DATABASE_NAME -d $DATABASE_NAME -c "$CLOSE_ALL_CONNECTIONS" > /dev/null
+  echo "OK"
+
+  printf "Destroying database $DATABASE_NAME... "
+  dropdb -e --if-exists $DATABASE_NAME > /dev/null
+  echo "OK"
+
+  printf "Destroying user $DATABASE_USER... "
+  dropuser -e --if-exists $DATABASE_USER > /dev/null
+  echo "OK"
+
+  source bin/support/salesforcedatabase
+
+  DATABASE_NAME=$(database_name)
+  DATABASE_USER=$(database_user)
+
+done

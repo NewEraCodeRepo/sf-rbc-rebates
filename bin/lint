@@ -1,0 +1,39 @@
+#!/bin/bash
+
+LINT_CONFIG="tslint.json"
+TYPESCRIPT_CONFIG="tsconfig.json"
+ONLY_LIST_FILES=false
+DEFAULT_FILES="**/*.ts"
+FILES=$@
+
+function uncommitted_files() {
+  UNSTAGED_CHANGES=`git diff --name-only -- '*.ts'`
+  STAGED_CHANGES=`git diff --staged --name-only -- '*.ts'`
+  UNTRACKED_CHANGES=`git ls-files --exclude-standard --others -- '*.ts'`
+  echo $STAGED_CHANGES $UNSTAGED_CHANGES $UNTRACKED_CHANGES | uniq
+}
+
+while :; do
+  case $1 in
+    --uncommitted)
+      FILES=$(uncommitted_files)
+      ;;
+    -*?)
+      echo "Unrecognized flag $1"
+      exit 1
+      ;;
+    *) # No more options, so break out of the loop.
+      break
+  esac
+
+  shift
+done
+
+FILES=${FILES:-"$DEFAULT_FILES"}
+
+exec yarn run --silent \
+  tslint \
+    --config $LINT_CONFIG \
+    --project $TYPESCRIPT_CONFIG \
+    --format verbose
+    $FILES

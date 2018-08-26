@@ -1,0 +1,1 @@
+ALTER SEQUENCE transaction_import_details_id_seq RENAME TO bulk_account_transactions_import_id_seq;

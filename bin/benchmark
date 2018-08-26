@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Exit if any command files
+set -e
+
+if [ "$1" == "--watch" ]; then
+  bin/watch "bin/build && bin/benchmark"
+fi
+
+export NODE_ENV=test
+node build/test/benchmark/processing_transactions.js

@@ -1,0 +1,47 @@
+<header>
+  <h1><%= title %> for <%= user.id %> </h1>
+</header>
+
+<% if (user.creditCardProducts.length || user.debitCardProducts.length) { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Code</th>
+        <th>Ownership Type</th>
+        <th>Account Id</th>
+        <th>Customer Id</th>
+        <th>Is Eligible?</th>
+        <th>Primary User</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% user.creditCardProducts.forEach(product => { %>
+        <tr>
+          <td>CC</td>
+          <td><%= product.code %></td>
+          <td><%= product.ownershipType %></td>
+          <td><%= product.accountId %></td>
+          <td><%= product.customerId %></td>
+          <td><%= product.isEligibleClientProduct %></td>
+          <td><%= product.primaryAccountHashSRF %></td>
+        </tr>
+      <% }) %>
+      <% user.debitCardProducts.forEach(product => { %>
+        <tr>
+          <td>DDA</td>
+          <td><%= product.code %></td>
+          <td><%= product.ownershipType %></td>
+          <td><%= product.accountId %></td>
+          <td><%= product.customerId %></td>
+          <td><%= product.isEligibleClientProduct %></td>
+          <td></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <p class="note">Note: showing only up to a maximum of 100 entries.</p>
+<% } else { %>
+  <p class="empty">There's no products for this user yet, at least not yet received from Kafka</p>
+<% } %>

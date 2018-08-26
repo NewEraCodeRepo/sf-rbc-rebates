@@ -1,0 +1,39 @@
+<header>
+    <h1><%= title %></h1>
+
+    <nav>
+        <a href="/rebate_export/new" class="button">New export</a>
+    </nav>
+</header>
+
+<pre id="log"></pre>
+
+<% if (rebateExportDetails.length) { %>
+
+<table>
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Started At</th>
+        <th>Finished At</th>
+        <th>Status</th>
+        <th>Number Of Transactions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% rebateExportDetails.forEach(rebateExportDetail => { %>
+    <tr>
+        <td><%= rebateExportDetail.id %></td>
+        <td><%= rebateExportDetail.startedAt %></td>
+        <td><%= rebateExportDetail.finishedAt %></td>
+        <td><%= rebateExportDetail.status || 'pending' %></td>
+        <td><%= rebateExportDetail.numberOfItems %></td>
+    </tr>
+    <% }) %>
+    </tbody>
+</table>
+</form>
+
+<% } else { %>
+<p class="empty">There are no exports yet.</p>
+<% } %>

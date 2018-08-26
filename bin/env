@@ -1,0 +1,10 @@
+#!/bin/bash
+
+export NODE_ENV=${1:-$NODE_ENV}
+
+source bin/support/typescript
+
+evaluate_typescript <<TYPESCRIPT
+import config from './config/environment';
+console.log(JSON.stringify(config, null, 4));
+TYPESCRIPT

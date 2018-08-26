@@ -1,0 +1,74 @@
+#!/bin/bash
+
+# Exit if any command fails
+set -e
+
+# Valid commands:
+#   bin/dbmigrate -> runs migrations for all databases
+#   bin/dbmigrate create add-blaster-doors -> creates a new migration for the default schema
+#   bin/dbmigrate create-salesforce add-blaster-doors -> creates a new migration for the salesforce schema/db
+#   bin/dbmigrate create-history add-blaster-doors -> creates a new migration for the history schema
+#
+
+MIGRATION_COMMAND="yarn run --silent db-migrate"
+MIGRATION_FLAGS="--migrations-dir db/migrations"
+NODE_ENV=${NODE_ENV:-development}
+MIGRATION_SUBCOMMAND=${1:-up}
+
+if [ "$1" != "" ]; then
+  shift
+fi
+
+if [ "$MIGRATION_SUBCOMMAND" == "create" ]; then
+  MIGRATION_FLAGS+=" --sql-file"
+fi
+
+# don't mess with the default database if we're just trying to create scripts for the history/salesforce tables
+if [ "$MIGRATION_SUBCOMMAND" != "create-salesforce" ] && [ "$MIGRATION_SUBCOMMAND" != "create-history" ]; then
+  source bin/support/database
+
+  DATABASE_URL=$(database_url) $MIGRATION_COMMAND $MIGRATION_SUBCOMMAND $@ $MIGRATION_FLAGS
+
+  echo "Done with default db/schema..."
+fi
+
+# perform migration for the history database
+MIGRATION_FLAGS="--migrations-dir db/history_migrations"
+
+# don't mess with the history database if we're just trying to create scripts for the default/salesforce tables
+if [ "$MIGRATION_SUBCOMMAND" != "create" ] && [ "$MIGRATION_SUBCOMMAND" != "create-salesforce" ]; then
+
+  # if we're trying to create a migration for the history database
+  if [ "$MIGRATION_SUBCOMMAND" == "create-history" ]; then
+    MIGRATION_SUBCOMMAND="create"
+    MIGRATION_FLAGS+=" --sql-file"
+  fi
+
+  source bin/support/historydatabase
+
+  DATABASE_URL=$(database_url) $MIGRATION_COMMAND $MIGRATION_SUBCOMMAND $@ $MIGRATION_FLAGS
+
+  echo "Done with history db/schema..."
+fi
+
+# perform migrations for the salesforce database
+MIGRATION_FLAGS="--migrations-dir db/salesforce_migrations"
+
+# if we're attempting to create Heroku Connect/Salesforce table migrations (just for local development/testing)
+if [ "$MIGRATION_SUBCOMMAND" == "create-salesforce" ]; then
+  MIGRATION_SUBCOMMAND="create"
+  MIGRATION_FLAGS+=" --sql-file"
+
+  source bin/support/salesforcedatabase
+
+  DATABASE_URL=$(database_url) $MIGRATION_COMMAND $MIGRATION_SUBCOMMAND $@ $MIGRATION_FLAGS
+fi
+
+# only perform the updates of the heroku connect tables if we're NOT in Heroku AND
+# don't mess with the history database if we're just trying to create scripts for the default/history tables
+if [ "$ATTACHED_DB_URL_NAME" == "" ] && [ "$MIGRATION_SUBCOMMAND" != "create" ] && [ "$MIGRATION_SUBCOMMAND" != "create-history" ]; then
+  source bin/support/salesforcedatabase
+
+  DATABASE_URL=$(database_url) $MIGRATION_COMMAND $MIGRATION_SUBCOMMAND $@ $MIGRATION_FLAGS
+fi
+

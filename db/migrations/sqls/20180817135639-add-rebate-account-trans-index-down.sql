@@ -1,0 +1,1 @@
+DROP INDEX rebates_index_acct_trans_id;

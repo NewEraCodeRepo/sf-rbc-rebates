@@ -1,0 +1,22 @@
+# Any patterns to ignore in here should be project-specific. OS-specific files
+# (.DS_Store, Thumbs.db, etc.) and editor-specific files are oftern better
+# placed in your user's global gitignore file or in .git/info/excludes.
+
+# Ignore idea files
+.idea/
+
+# Ignore node_modules
+node_modules/
+
+# Ignore all build artifacts
+build/
+
+# Ignore error logs
+yarn-error.log
+
+# Ignore newrelic logs
+newrelic_agent.log
+
+# A local list of environment variables
+.env
+.vscode

@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+
+const semver = require('semver');
+const targetNodeVersion = require('../../package.json').engines.node;
+
+if (!semver.satisfies(process.version, targetNodeVersion)) {
+
+  message = `
+==> Your Node version isn't compatible with this project.
+
+    Your version: ${process.version}
+    Target version: ${targetNodeVersion}
+
+    Please switch to a version that matches ${targetNodeVersion}.
+`;
+
+  console.error(message);
+  process.exit(1);
+}
+
+console.log("Node", process.version, "detected.")

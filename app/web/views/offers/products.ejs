@@ -1,0 +1,30 @@
+<header>
+  <h1><%= title %> for <%= offer.id %> </h1>
+</header>
+
+<% if (offer.eligibleProducts && Object.keys(offer.eligibleProducts).length ) { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Product Code External</th>
+        <th>Is Eligible</th>
+        <th>Redeemable Ownership Type</th>
+        <th>Presentable Ownership Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% Object.keys(offer.eligibleProducts).forEach(key => { %>
+        <tr>
+          <td><%= offer.eligibleProducts[key].productCodeExternal %></td>
+          <td><%= offer.eligibleProducts[key].isEligibleForMyOffers %></td>
+          <td><%= offer.eligibleProducts[key].redeemableOwnershipType %></td>
+          <td><%= offer.eligibleProducts[key].presentableOwnershipType %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <p class="note">Note: showing only up to a maximum of 100 entries.</p>
+<% } else { %>
+  <p class="empty">There's no products for this offer yet, at least not yet received from Kafka</p>
+<% } %>

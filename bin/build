@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Exit if any command fails
+set -e
+
+export BUILD_PATH=${BUILD_PATH:-build}
+
+# Clean
+rm -rf $BUILD_PATH
+
+# Compile TypeScript
+yarn run --silent tsc "$@"
+
+# Copy resources
+bin/support/build-static-resources

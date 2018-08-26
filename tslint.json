@@ -1,0 +1,40 @@
+// For justifications behind chosen lint rules, see
+// https://github.com/SalesforceCloudServices/rbc-rebate-management/wiki/Linting
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+        "interface-name": false,
+        "no-unused-variable": true,
+        "eofline": true,
+        "triple-equals": true,
+        "max-line-length": false,
+        "object-literal-sort-keys": false,
+        "await-promise": true,
+        "no-console": true,
+        "quotemark": false,
+        "trailing-comma": false,
+        "ordered-imports": false,
+
+        // The combination of these two flags still checks for unused
+        // expressions, but makes an exception for Chai's `.to.be.something`
+        // expectation syntax.
+        "no-unused-expression": false,
+        "no-unused-expression-chai": true
+    },
+    "rulesDirectory": [
+        "tslint-no-unused-expression-chai"
+    ],
+    // exclude typeorm conventions & forked files
+    "linterOptions": {
+        "exclude": [
+            "app/database/records/**/*", 
+            "app/database/salesforce_records/**/*",
+            "app/database/history_records/**/*",
+            "app/scheduler/*"
+        ]
+    }
+}

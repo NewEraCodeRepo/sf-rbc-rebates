@@ -1,0 +1,19 @@
+<h1><%= title %></h1>
+
+<form action="/transaction_import/upload" method="post">
+
+    <div class="group">
+        <textarea
+            name="csv"
+            rows="10"
+            placeholder="Paste CSV (including header row)"
+        ></textarea>
+    </div>
+
+    <div class="actions">
+        <input type="submit" value="Upload">
+    </div>
+</form>
+
+
+

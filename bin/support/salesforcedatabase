@@ -1,0 +1,29 @@
+#!/bin/sh
+
+source bin/support/typescript
+
+function print_config {
+  expression=$1
+  evaluate_typescript <<TYPESCRIPT
+    import config from './config/environment';
+    import { URL } from 'url';
+    const databaseURL = new URL(config.database.herokuConnectUrl);
+    console.log($expression);
+TYPESCRIPT
+}
+
+function database_url {
+  print_config "databaseURL.toString()"
+}
+
+function database_name {
+  print_config "databaseURL.pathname.substr(1)"
+}
+
+function database_user {
+  print_config "databaseURL.username"
+}
+
+function database_hostname {
+  print_config "databaseURL.hostname"
+}

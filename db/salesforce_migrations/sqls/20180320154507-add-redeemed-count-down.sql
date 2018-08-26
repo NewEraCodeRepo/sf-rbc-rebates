@@ -1,0 +1,1 @@
+ALTER TABLE salesforce.offer__c DROP COLUMN running_redemption_count__c;

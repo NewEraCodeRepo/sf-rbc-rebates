@@ -1,0 +1,48 @@
+<header>
+  <h1><%= title %></h1>
+
+  <nav>
+    <form method="post" action="/clients/delete-all">
+      <input type="submit" value="Delete all" class="delete-button">
+    </form>
+
+    <a href="/clients/new" class="button">New client</a>
+  </nav>
+</header>
+
+<% if (users.length) { %>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Linked Offers</th>
+        <th>Targeted Offers</th>
+        <th>Enrolled</th>
+        <th>Blacklisted</th>
+        <th>History</th>
+        <th>Products</th>
+        <th>Opt-Ins</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach(user => { %>
+        <tr>
+          <td><%= user.id %></td>
+          <td><%= user.linkedOfferIds %></td>
+          <td><%= user.targetedOfferIds %></td>
+          <td><%= user.isEnrolled %></td>
+          <td><%= user.isBlacklisted %></td>
+          <td> <a href="/clients/history/<%= user.id %>">History</a> </td>
+          <td> <a href="/clients/products/<%= user.id %>">Products</a> </td>
+          <td> <a href="/clients/optins/<%= user.id %>">Opt-Ins</a> </td>
+          <td> <a href="/clients/edit/<%= user.id %>">Edit</a> </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <p class="note">Note: showing only up to a maximum of 500 clients.</p>
+<% } else { %>
+  <p class="empty">There are no clients yet.</p>
+<% } %>

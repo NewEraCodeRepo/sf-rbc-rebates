@@ -1,0 +1,52 @@
+<header>
+  <h1><%= title %></h1>
+
+  <nav>
+    <form method="post" action="/rebates/delete-all">
+      <input type="submit" value="Delete all" class="delete-button">
+    </form>
+
+    <form method="post" action="/rebates/sync_to_mop" data-behavior="log">
+      <input type="submit" value="Sync to MOP">
+    </form>
+  </nav>
+</header>
+
+<% if (rebates.length) { %>
+  <table>
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Account</th>
+      <th>Client</th>
+      <th>Offer</th>
+      <th>Transaction</th>
+      <th>Amount</th>
+      <th>Reward Type</th>
+      <th>Status</th>
+      <th>Issued</th>
+      <th>Delivered</th>
+    </tr>
+    </thead>
+    <tbody>
+      <% rebates.forEach(rebate => { %>
+        <tr>
+          <td><%= rebate.id %></td>
+          <td><%= rebate.accountId %></td>
+          <td><%= rebate.userId %></td>
+          <td><%= rebate.rebateCriteriaId %></td>
+          <td><%= rebate.accountTransactionId %></td>
+          <td><%= rebate.amount %></td>
+          <td><%= rebate.rewardType %></td>
+          <td><%= rebate.status %></td>
+          <td><%= rebate.issuedAt %></td>
+          <td><%= rebate.deliveredAt %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <p class="note">Note: showing only up to a maximum of 500 rebates.</p>
+<% } else { %>
+  <p class="empty">There are no rebates yet.</p>
+<% } %>

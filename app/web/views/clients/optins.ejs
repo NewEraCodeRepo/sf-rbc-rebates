@@ -1,0 +1,30 @@
+<header>
+    <h1><%= title %> for <%= user.id %> </h1>
+</header>
+
+<% if (user.optInFileOffers.length) { %>
+<table>
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th>Customer ID</th>
+        <th>Account ID</th>
+        <th>Offers</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% user.optInFileOffers.forEach(optIn => { %>
+    <tr>
+        <td><%= optIn.type %></td>
+        <td><%= optIn.tsysCustomerId %></td>
+        <td><%= optIn.tsysAccountId %></td>
+        <td><%= optIn.offers %></td>
+    </tr>
+    <% }) %>
+    </tbody>
+</table>
+
+<p class="note">Note: showing only up to a maximum of 100 entries.</p>
+<% } else { %>
+<p class="empty">There's no opt-ins for this user yet, at least not yet received from Kafka</p>
+<% } %>

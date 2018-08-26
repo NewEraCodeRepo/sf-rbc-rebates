@@ -1,0 +1,1 @@
+DELETE TABLE IF EXISTS report_myoffers_unfulfilled_rebate_v3__c;

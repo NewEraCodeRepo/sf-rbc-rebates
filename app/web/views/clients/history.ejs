@@ -1,0 +1,42 @@
+<header>
+  <% if (!userHistory.length) { %>
+    <h1>No History for User</h1>
+  <% } else { %>
+    <h1><%= title %> for <%= userHistory[0].userId %> </h1>
+    <nav>
+      <form method="post" action="/clients/history/delete-all/<%= userHistory[0].userId %>">
+        <input type="submit" value="Delete all" class="delete-button">
+      </form>
+
+    </nav>
+  <% } %>
+</header>
+
+<% if (userHistory.length) { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Updated Timestamp</th>
+        <th>Targeted Offers</th>
+        <th>Linked Offers</th>
+        <th>Enrolled</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% userHistory.forEach(user => { %>
+        <tr>
+          <td><%= user.updateTimestamp %></td>
+          <td><%= user.targetedOffers %></td>
+          <td><%= user.linkedOffers %></td>
+          <td><%= user.isEnrolledToMyOffers %></td>
+          <td> <a href="/clients/edit_history/id/<%= user.userId %>/timestamp/<%= user.isoDate %>">Edit Updated Timestamp</a> </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <p class="note">Note: showing only up to a maximum of 100 entries.</p>
+<% } else { %>
+  <p class="empty">There's no history for this user yet, at least not yet received from Kafka</p>
+<% } %>
